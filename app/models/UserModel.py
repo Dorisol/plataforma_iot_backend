@@ -8,8 +8,6 @@ class Users(Base):
     fk_tenant_id = Column(Uuid, ForeignKey("tenants.id_tenant"))
     username = Column(String, unique=True, index=True)
     password_hash = Column(String)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
     api_key = Column(String)
     role = Column(String)
     is_active = Column(Boolean, default=True)

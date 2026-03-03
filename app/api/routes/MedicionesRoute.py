@@ -7,8 +7,7 @@ from app.controllers import MedicionesController
 from app.schemas import MedicionesSchema
 from uuid import UUID
 
-
-#endpoints para el dashboard de Quasar
+#endpoints
 router = APIRouter()
 
 @router.get("/todasMediciones", response_model=List[MedicionesSchema.Mediciones])
@@ -18,8 +17,6 @@ def get_mediciones(db: Session = Depends(get_db)):
 @router.get("/mediciones/{tenant_id}", response_model=List[MedicionesSchema.Mediciones])
 def get_mediciones_tenant(tenant_id: UUID, db: Session = Depends(get_db)):
     return MedicionesController.get_mediciones_tenant(db, tenant_id)
-
-
 
 
 

@@ -4,6 +4,7 @@ from app.core.config import settings
 import threading
 from app.db import base
 from app.api.routes import MedicionesRoute
+from app.api.routes import AuthRoute
 from app.mqtt.handler import start_mqtt
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,6 +14,7 @@ origin = [
     "http://localhost:3000",
 ]
 
+#Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origin,
@@ -21,10 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#Aqui definir las rutas
+app.include_router(MedicionesRoute.router, prefix="/api/Mediciones", tags=["Mediciones"])
+app.include_router(AuthRoute.router, prefix="/api/Auth", tags=["Auth"])
 
-
-app.include_router(MedicionesRoute.router, prefix="/api/mediciones", tags=["Mediciones"])
-
+#Para MQTT (PENDIENTE)
 @app.on_event("startup")
 def startup_event():
     print("Iniciando hilo de MQTT...")
