@@ -5,9 +5,9 @@ from sqlalchemy.orm import relationship
 
 class Mediciones(Base):
     __tablename__ = "mediciones"
-    id_medida = Column(Uuid, primary_key=True, index=True)
-    fk_tenant_id = Column(Uuid, ForeignKey("tenants.id_tenant"))
-    fk_user_id = Column(Uuid, ForeignKey("users.id_user"))
+    idMedicion = Column(Uuid, primary_key=True, index=True)
+    idTenant = Column(Uuid, ForeignKey("tenants.idTenant"))
+    idUsuario = Column(Uuid, ForeignKey("usuarios.idUsuario"))
     variable = Column(String)
     val = Column(Float)
     unit = Column(String)
@@ -16,4 +16,4 @@ class Mediciones(Base):
 
 
     tenant_med = relationship("Tenant", back_populates="medicion")
-    user_med = relationship("Users", back_populates="medicion")
+    usuario_med = relationship("Usuarios", back_populates="medicion")

@@ -2,16 +2,11 @@ from pydantic import BaseModel
 from datetime import datetime
 from uuid import UUID
 
-class TenantBase(BaseModel):
-    name: str
-
-class Tenant(TenantBase):
-    id_tenant: UUID
-    is_active: bool
+class TenantsSchema(BaseModel):
+    idTenant: UUID
+    nombre: str
     created_at: datetime
+    isActivo: bool
 
     class Config:
         from_attributes = True
-
-class TenantCreate(TenantBase):
-    pass #no necesita campos adicionales

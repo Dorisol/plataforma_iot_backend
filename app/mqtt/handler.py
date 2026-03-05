@@ -33,13 +33,13 @@ def on_message(client, userdata, msg):
         db = SessionLocal()
         # Crear el registro usando el modelo de SQLAlchemy
         nueva_medicion = Mediciones(
-            id_medida = uuid.uuid4(),
-            fk_tenant_id=tenant_uuid,
-            fk_user_id=device_uuid,
+            idMedicion = uuid.uuid4(),
+            idTenant=tenant_uuid,
+            idUsuario=device_uuid,
             variable=payload.get("variable"),
             val=payload.get("val"),
             unit=payload.get("unit"),
-            metadata={"device": str(device_uuid)}
+            metadata_medicion={"device": str(device_uuid)}
         )
         
         db.add(nueva_medicion)
@@ -47,6 +47,9 @@ def on_message(client, userdata, msg):
         #print("¡Medición guardada en la base de datos!")
     except Exception as e:
         print(f"ERROR procesando mensaje: {e}")
+    finally:
+        if db:
+            db.close()
 
 def start_mqtt():
     client = mqtt.Client()
