@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     EXPIRACION_TOKEN: int = 30
+    USER_MQTT: str
+    PASSWORD_MQTT: str
+
 
     class Config:
         env_file = ".env"

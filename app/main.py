@@ -1,14 +1,13 @@
 
 from fastapi import FastAPI
 from app.core.config import settings
-import threading
 from app.db import base
 from app.api.routes import MedicionesRoute
 from app.api.routes import AuthRoute
 from app.api.routes import TenantsRoute
 from app.api.routes import UsuariosRoute
-from app.mqtt.handler import start_mqtt
 from fastapi.middleware.cors import CORSMiddleware
+from app.mqtt.handler import start_mqtt
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
@@ -32,9 +31,9 @@ app.include_router(AuthRoute.router, prefix="/plataforma_iot/api", tags=["Auth"]
 app.include_router(TenantsRoute.router, prefix="/plataforma_iot/api", tags=["Tenants"])
 app.include_router(UsuariosRoute.router, prefix="/plataforma_iot/api", tags=["Usuarios"])
 
-#Para MQTT (PENDIENTE)
+#Aqui recibo los datos de MQTT
 @app.on_event("startup")
-def startup_event():
+def iniciar_mqtt():
     print("Iniciando hilo de MQTT...")
     start_mqtt()
     print("Hilo de MQTT iniciado en segundo plano.")

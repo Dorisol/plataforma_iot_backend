@@ -3,17 +3,22 @@ import paho.mqtt.client as mqtt
 from uuid import UUID
 import uuid
 from app.db.session import SessionLocal
+from app.core.config import settings
 from app.models.MedicionesModel import Mediciones
+
+mqtt_client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Conectado exitosamente al Broker MQTT")
-        client.subscribe("v1/+/+/data")
+        print("Conectado exitosamente al Broker MQTT", flush=True)
+        #client.subscribe("v1/+/+/data")
+        client.subscribe("v1/#") 
     else:
-        print(f"Error de conexión al broker, código: {rc}")
+        print(f"Error de conexión al broker, código: {rc}", flush=True)
 
 def on_message(client, userdata, msg):
-    #print(f"\nNuevo mensaje recibido en tópico: {msg.topic}")
+    print("Holaaaaaaaaaaaaaaaaaaaaaaaaaa", flush=True)
+    print(f"\nNuevo mensaje recibido en tópico: {msg.topic}", flush=True)
     db = None
     
     try:
@@ -44,7 +49,7 @@ def on_message(client, userdata, msg):
         
         db.add(nueva_medicion)
         db.commit()
-        #print("¡Medición guardada en la base de datos!")
+        print("Medicion guardada")
     except Exception as e:
         print(f"ERROR procesando mensaje: {e}")
     finally:
@@ -52,15 +57,14 @@ def on_message(client, userdata, msg):
             db.close()
 
 def start_mqtt():
-    client = mqtt.Client()
-    # Credenciales configuradas en el ESP32... Aqui debo cuidar las credenciales que debo pasar..
-    client.username_pw_set("esp_user_1", "4321")
-    client.on_connect = on_connect
-    client.on_message = on_message
+    global mqtt_client
+    mqtt_client.username_pw_set(settings.USER_MQTT, settings.PASSWORD_MQTT)
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = on_message
     
     # 'mosquitto' es el nombre del servicio en docker-compose.yml
     try:
-        client.connect("mosquitto", 1883, 60)
-        client.loop_start()
+        mqtt_client.connect("mosquitto", 1883, 60)
+        mqtt_client.loop_start()
     except Exception as e:
         print(f"No se pudo iniciar el cliente MQTT: {e}")
