@@ -7,6 +7,7 @@ class TenantsSchema(BaseModel):
     nombre: str
     created_at: datetime
     isActivo: bool
+    ubicacion: str
 
     class Config:
         from_attributes = True

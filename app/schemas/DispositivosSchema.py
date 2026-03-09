@@ -9,6 +9,7 @@ class DispositivosBase(BaseModel):
     rol: str
     isActivo: bool
     protocolo: str | None
+    imagenesDisponibles: bool
 
     class Config:
         from_attributes = True

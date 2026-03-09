@@ -11,6 +11,7 @@ class Dispositivos(Base):
     rol = Column(String)
     isActivo = Column(Boolean, default=True)
     protocolo = Column(String)
+    imagenesDisponibles = Column(Boolean)
     created_at = Column(TIMESTAMP)
 
     #Relaciones

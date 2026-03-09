@@ -8,7 +8,8 @@ class Tenant(Base):
     nombre = Column(String, index=True)
     isActivo = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP)
-    
+    ubicacion = Column(String)
+
 
     #(nombre del modelo relacionado, nombre del campo que va a estar relacionado en el otro modelo)
     #en ese caso, "tenants" debe definirse en el modelo User

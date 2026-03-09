@@ -7,6 +7,7 @@ class UsuarioBase(BaseModel):
     username: str
     rol: str
     isActivo: bool
+    
 
     class Config:
         from_attributes = True
