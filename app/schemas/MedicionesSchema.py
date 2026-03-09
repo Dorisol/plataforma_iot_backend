@@ -14,9 +14,9 @@ class MedicionesBase(BaseModel):
 class Mediciones(MedicionesBase):
     idMedicion: UUID
     idTenant: UUID
-    idUsuario: UUID
+    idDispositivo: UUID
     recorded_at: datetime
 
 class MedicionesCreate(MedicionesBase):
     idTenant: UUID
-    idUsuario: UUID
+    idDispositivo: UUID

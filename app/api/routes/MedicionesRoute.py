@@ -18,6 +18,6 @@ def get_mediciones(db: Session = Depends(get_db)):
 def get_mediciones_tenant(tenant_id: UUID, db: Session = Depends(get_db)):
     return MedicionesController.get_mediciones_tenant(db, tenant_id)
 
-@router.get("/mediciones/{tenant_id}/{usuario_id}", response_model=List[MedicionesSchema.Mediciones])
-def get_mediciones_usuario(usuario_id: UUID, tenant_id: UUID, db: Session = Depends(get_db)):
-    return MedicionesController.get_mediciones_usuario(db, usuario_id, tenant_id)
+@router.get("/mediciones/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
+def get_mediciones_usuario(dispositivo_id: UUID, tenant_id: UUID, db: Session = Depends(get_db)):
+    return MedicionesController.get_mediciones_usuario(db, dispositivo_id, tenant_id)

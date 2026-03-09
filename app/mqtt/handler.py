@@ -40,7 +40,7 @@ def on_message(client, userdata, msg):
         nueva_medicion = Mediciones(
             idMedicion = uuid.uuid4(),
             idTenant=tenant_uuid,
-            idUsuario=device_uuid,
+            idDispositivo=device_uuid,
             variable=payload.get("variable"),
             val=payload.get("val"),
             unit=payload.get("unit"),

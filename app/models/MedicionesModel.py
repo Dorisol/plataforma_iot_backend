@@ -7,13 +7,12 @@ class Mediciones(Base):
     __tablename__ = "mediciones"
     idMedicion = Column(Uuid, primary_key=True, index=True)
     idTenant = Column(Uuid, ForeignKey("tenants.idTenant"))
-    idUsuario = Column(Uuid, ForeignKey("usuarios.idUsuario"))
+    idDispositivo = Column(Uuid, ForeignKey("dispositivos.idDispositivo"))
     variable = Column(String)
     val = Column(Float)
     unit = Column(String)
     recorded_at = Column(DateTime, default=datetime.now)
     metadata_medicion = Column("metadata",JSON)
 
-
     tenant_med = relationship("Tenant", back_populates="medicion")
-    usuario_med = relationship("Usuarios", back_populates="medicion")
+    dispositivo = relationship("Dispositivos", back_populates="medicion")

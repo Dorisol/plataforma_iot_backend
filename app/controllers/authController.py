@@ -77,7 +77,6 @@ def crearUsuario(db: Session, nuevoUsuario: UsuarioCreate):
         idTenant=nuevoUsuario.idTenant,
         username=nuevoUsuario.username,
         password=hashed_password,
-        apiKey=nuevoUsuario.apiKey,
         rol=nuevoUsuario.rol,
         isActivo=True,
         created_at=datetime.now(),

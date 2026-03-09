@@ -14,3 +14,5 @@ def get_usuarios(db: Session = Depends(get_db)):
     return UsuariosController.get_usuarios(db)
 
 
+
+

@@ -13,4 +13,5 @@ class Tenant(Base):
     #(nombre del modelo relacionado, nombre del campo que va a estar relacionado en el otro modelo)
     #en ese caso, "tenants" debe definirse en el modelo User
     usuario = relationship("Usuarios", back_populates="tenant")
+    dispositivos = relationship("Dispositivos", back_populates="tenant")
     medicion = relationship("Mediciones", back_populates="tenant_med")

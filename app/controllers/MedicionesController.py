@@ -11,11 +11,13 @@ def get_mediciones_tenant(db: Session, idTenant: UUID):
     except Exception:
         return []
     
-def get_mediciones_usuario(db: Session, idUsuario: UUID, idTenant: UUID):
+def get_mediciones_usuario(db: Session, idDispositivo: UUID, idTenant: UUID):
     try:
-        return db.query(Mediciones).filter(Mediciones.idUsuario == idUsuario, Mediciones.idTenant == idTenant).all()       
+        return db.query(Mediciones).filter(Mediciones.idDispositivo == idDispositivo, Mediciones.idTenant == idTenant).all()       
     except Exception:
         return []
+    
+
     
 
     

@@ -5,7 +5,6 @@ from uuid import UUID
 class UsuarioBase(BaseModel):
     idTenant: UUID
     username: str
-    apiKey: str | None
     rol: str
     isActivo: bool
 
