@@ -21,3 +21,16 @@ def get_mediciones_tenant(tenant_id: UUID, db: Session = Depends(get_db)):
 @router.get("/mediciones/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
 def get_mediciones_usuario(dispositivo_id: UUID, tenant_id: UUID, db: Session = Depends(get_db)):
     return MedicionesController.get_mediciones_usuario(db, dispositivo_id, tenant_id)
+
+@router.get("/mediciones/temperatura/24hrs/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
+def get_temperatura_dispositivo_24hrs(tenant_id: UUID, dispositivo_id: UUID, db: Session = Depends(get_db)):
+    return MedicionesController.get_temperatura_dispositivo_24hrs(db, dispositivo_id, tenant_id)
+
+
+@router.get("/mediciones/temperatura/semana/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
+def get_temperatura_dispositivo_semana(tenant_id: UUID, dispositivo_id: UUID, db: Session = Depends(get_db)):
+    return MedicionesController.get_temperatura_dispositivo_semana(db, dispositivo_id, tenant_id)
+
+@router.get("/mediciones/humedad/24hrs/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
+def get_humedad_dispositivo_24hrs(tenant_id: UUID, dispositivo_id: UUID, db: Session = Depends(get_db)):
+    return MedicionesController.get_humedad_dispositivo_24hrs(db, dispositivo_id, tenant_id)
