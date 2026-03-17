@@ -7,6 +7,7 @@ from app.api.routes import AuthRoute
 from app.api.routes import TenantsRoute
 from app.api.routes import UsuariosRoute
 from app.api.routes import DispositivosRoute
+from app.api.routes import WebsocketRoute
 from fastapi.middleware.cors import CORSMiddleware
 from app.mqtt.handler import start_mqtt
 
@@ -32,6 +33,9 @@ app.include_router(AuthRoute.router, prefix="/plataforma_iot/api", tags=["Auth"]
 app.include_router(TenantsRoute.router, prefix="/plataforma_iot/api", tags=["Tenants"])
 app.include_router(UsuariosRoute.router, prefix="/plataforma_iot/api", tags=["Usuarios"])
 app.include_router(DispositivosRoute.router, prefix="/plataforma_iot/api", tags=["Dispositivos"])
+app.include_router(WebsocketRoute.router, tags=["Websockets"])
+
+
 
 #Aqui recibo los datos de MQTT
 @app.on_event("startup")
