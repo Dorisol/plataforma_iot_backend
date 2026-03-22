@@ -18,7 +18,7 @@ def get_mediciones(db: Session = Depends(get_db)):
 def get_mediciones_tenant(tenant_id: UUID, db: Session = Depends(get_db)):
     return MedicionesController.get_mediciones_tenant(db, tenant_id)
 
-@router.get("/mediciones/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.Mediciones])
+@router.get("/mediciones/{tenant_id}/{dispositivo_id}", response_model=List[MedicionesSchema.MedicionAgrupada])
 def get_mediciones_por_rango(tenant_id: UUID, dispositivo_id: UUID,  rango: str = "7d", db: Session = Depends(get_db)):
     return MedicionesController.get_mediciones_por_rango(db, tenant_id, dispositivo_id, rango)
 

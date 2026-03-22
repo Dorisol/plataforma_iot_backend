@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from app.models.MedicionesModel import Mediciones
 from uuid import UUID
 from datetime import datetime, timedelta
@@ -73,17 +74,38 @@ def get_mediciones_usuario(db: Session, idDispositivo: UUID, idTenant: UUID):
 
 def get_mediciones_por_rango(db: Session, idTenant: UUID, idDispositivo: UUID, rango: str):
     try:
-        #primero determinar el límite de tiempo
+        #primero determinar el límite de tiempo y agrupación de los datos
         if rango == "24h":
             limite_tiempo = datetime.now() - timedelta(hours=24)
+            tiempo_agrupado = func.date_trunc('hour', Mediciones.recorded_at)
         else:
             limite_tiempo = datetime.now() - timedelta(days=7)
-        
-        return db.query(Mediciones).filter(
+            tiempo_agrupado = func.date_trunc('day', Mediciones.recorded_at)
+
+        #consulta promediando valores
+        resultados = db.query(
+            tiempo_agrupado.label('recorded_at'),
+            Mediciones.variable,
+            func.avg(Mediciones.val).label('val')
+        ).filter(
             Mediciones.idTenant == idTenant,
             Mediciones.idDispositivo == idDispositivo,
             Mediciones.recorded_at >= limite_tiempo
-        ).order_by(Mediciones.recorded_at.asc()).all()
+        ).group_by(
+            tiempo_agrupado, 
+            Mediciones.variable
+        ).order_by(
+            tiempo_agrupado.asc()
+        ).all()
+
+        
+        # return db.query(Mediciones).filter(
+        #     Mediciones.idTenant == idTenant,
+        #     Mediciones.idDispositivo == idDispositivo,
+        #     Mediciones.recorded_at >= limite_tiempo
+        # ).order_by(Mediciones.recorded_at.asc()).all()
+
+        return resultados
 
     except Exception as e:
         print("Error al obtener las mediciones por rango: ", e)

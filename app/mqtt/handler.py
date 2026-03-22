@@ -69,29 +69,29 @@ def on_message(client, userdata, msg):
 
 
         #Estado de conexion    
-        elif tipo_topico == "status":
-            estado_str = msg.payload.decode()   #online u offline
-            print(f"Estado de conexion: {estado_str}")
+        # elif tipo_topico == "status":
+        #     estado_str = msg.payload.decode()   #online u offline
+        #     print(f"Estado de conexion: {estado_str}")
 
-            isActivo = True if estado_str == "online" else False
+        #     isActivo = True if estado_str == "online" else False
 
-            #buscar el dispositivo en la base de datos y actualizar su estado
-            dispositivo = db.query(Dispositivos).filter(Dispositivos.idDispositivo == device_uuid).first()
+        #     #buscar el dispositivo en la base de datos y actualizar su estado
+        #     dispositivo = db.query(Dispositivos).filter(Dispositivos.idDispositivo == device_uuid).first()
 
-            if dispositivo:
-                dispositivo.isActivo = isActivo
-                db.commit()
-                print("Estado del dispositivo actualizado")
-            else:
-                print("Dispositivo no encontrado")
+        #     if dispositivo:
+        #         dispositivo.isActivo = isActivo
+        #         db.commit()
+        #         print("Estado del dispositivo actualizado")
+        #     else:
+        #         print("Dispositivo no encontrado")
 
-            # Avisar al frontend
-            mensaje_ws = {
-                "tipo": "cambio_estado",
-                "idDispositivo": str(device_uuid),
-                "estado": estado_str
-            }
-            asyncio.run(ws_manager.broadcast(mensaje_ws))
+        #     # Avisar al frontend
+        #     mensaje_ws = {
+        #         "tipo": "cambio_estado",
+        #         "idDispositivo": str(device_uuid),
+        #         "estado": estado_str
+        #     }
+        #     asyncio.run(ws_manager.broadcast(mensaje_ws))
 
     except Exception as e:
         print(f"ERROR procesando mensaje: {e}")

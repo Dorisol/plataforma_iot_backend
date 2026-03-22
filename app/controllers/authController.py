@@ -4,7 +4,6 @@ import bcrypt
 from fastapi import HTTPException, status
 from app.core.config import settings
 from app.schemas.AuthSchema import LoginSchema
-from app.schemas.UsuarioSchema import UsuarioCreate
 from sqlalchemy.orm import Session
 from app.models.UsuariosModel import Usuarios
 import uuid
@@ -17,13 +16,6 @@ def verificarPassword(password_plana: str, password_hasheada: str) -> bool:
         password_plana.encode('utf-8'), 
         password_hasheada.encode('utf-8')
     )
-
-#Desencripta la contraseña 
-def obtenerPassHasheada(password: str) -> str:
-    pwd_bytes = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(pwd_bytes, salt)
-    return hashed.decode('utf-8')
 
 #Genera el JWT para poder realizar peticiones. 
 def crearToken(datos: dict, expiracion: timedelta = None):
@@ -69,19 +61,4 @@ def login(db: Session, usuarioLogin: LoginSchema):
     
     return {"access_token": token, "token_type": "bearer"}
 
-def crearUsuario(db: Session, nuevoUsuario: UsuarioCreate):
-    hashed_password = obtenerPassHasheada(nuevoUsuario.password)
 
-    db_user = Usuarios(
-        idUsuario=uuid.uuid4(),
-        idTenant=nuevoUsuario.idTenant,
-        username=nuevoUsuario.username,
-        password=hashed_password,
-        rol=nuevoUsuario.rol,
-        isActivo=True,
-        created_at=datetime.now(),
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
