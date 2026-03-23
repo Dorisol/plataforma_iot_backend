@@ -9,8 +9,10 @@ from uuid import UUID
 #endpoints
 router = APIRouter()
 
-#usuarios que NO SON ADMIN NI SUPER_ADMIN
-@router.get("/dispositivos/{idTenant}", response_model=List[DispositivosSchema.DispositivosSchema])
-def get_dispositivos(db: Session = Depends(get_db), idTenant: str = None):
-    return DispositivosController.get_dispositivos(db, idTenant)
+@router.get("/dispositivos/todosDispositivos", response_model=List[DispositivosSchema.DispositivosSchema])
+def get_todos_dispositivos(db: Session = Depends(get_db)):
+    return DispositivosController.get_todos_dispositivos(db)
 
+@router.get("/dispositivos/{idTenant}", response_model=List[DispositivosSchema.DispositivosSchema])
+def get_dispositivos(db: Session = Depends(get_db), idTenant: UUID = None):
+    return DispositivosController.get_dispositivos(db, idTenant)

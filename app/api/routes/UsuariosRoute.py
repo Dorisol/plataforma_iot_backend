@@ -17,3 +17,8 @@ def get_usuarios(db: Session = Depends(get_db)):
 @router.post("/usuarios/crearUsuario", response_model=UsuarioBase)
 def crearUsuario(user_data: UsuarioCreate, db: Session = Depends(get_db)):
     return UsuariosController.crearUsuario(db, user_data)
+
+@router.delete("/usuarios/eliminarUsuario/{idUsuario}")
+def eliminarUsuario(idUsuario: UUID, db: Session = Depends(get_db)):
+    return UsuariosController.eliminarUsuario(db, idUsuario)
+

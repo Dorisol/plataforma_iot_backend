@@ -16,16 +16,34 @@ def obtenerPassHasheada(password: str) -> str:
 
 
 def crearUsuario(db: Session, nuevoUsuario: UsuarioCreate):
-    hashed_password = obtenerPassHasheada(nuevoUsuario.password)
+    try:
+        hashed_password = obtenerPassHasheada(nuevoUsuario.password)
 
-    db_user = Usuarios(
-        idTenant=nuevoUsuario.idTenant,
-        username=nuevoUsuario.username,
-        password=hashed_password,
-        rol=nuevoUsuario.rol,
-        isActivo=nuevoUsuario.isActivo,
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+        db_user = Usuarios(
+            idTenant=nuevoUsuario.idTenant,
+            username=nuevoUsuario.username,
+            password=hashed_password,
+            rol=nuevoUsuario.rol,
+            isActivo=nuevoUsuario.isActivo,
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    
+    except Exception as e:
+        print("Error al crear el usuario: ", e)
+        return None
+
+
+#eliminar usuario
+def eliminarUsuario(db: Session, idUsuario: str):
+    try:
+        usuario = db.query(Usuarios).filter(Usuarios.idUsuario == idUsuario).first()
+        if usuario:
+            db.delete(usuario)
+            db.commit()
+            return True
+    except Exception as e:
+        print("Error al eliminar el usuario", e)
+        return None
