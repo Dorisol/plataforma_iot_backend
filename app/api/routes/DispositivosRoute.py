@@ -19,4 +19,4 @@ def get_dispositivos(db: Session = Depends(get_db), idTenant: UUID = None):
 
 @router.post("/dispositivos/crearDispositivo", response_model=DispositivosSchema.DispositivosSchema)
 def crearDispositivo(dispositivo_data: DispositivosSchema.DispositivosCreate, db: Session = Depends(get_db)):
-    return DispositivosController.crearUsuario(db, dispositivo_data)
+    return DispositivosController.crearDispositivo(db, dispositivo_data)

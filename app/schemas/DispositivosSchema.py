@@ -24,6 +24,7 @@ class DispositivosCreate(BaseModel):
     isActivo: bool = True
     protocolo: str | None
     imagenesDisponibles: bool
+    apiKey: str 
     
 class DispositivosSchema(DispositivosBase):
     idDispositivo: UUID

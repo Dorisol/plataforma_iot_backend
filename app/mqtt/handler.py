@@ -20,7 +20,7 @@ def on_connect(client, userdata, flags, rc):
         print(f"Error de conexión al broker, código: {rc}", flush=True)
 
 def on_message(client, userdata, msg):
-    #print(f"\nNuevo mensaje recibido en tópico: {msg.topic}", flush=True)
+    print(f"\nNuevo mensaje recibido en tópico: {msg.topic}", flush=True)
     db = None
     
     try:
@@ -41,7 +41,7 @@ def on_message(client, userdata, msg):
 
         if tipo_topico == "data":
             payload = json.loads(msg.payload.decode())
-            #print(f"Payload decodificado: {payload}")
+            print(f"Payload decodificado: {payload}")
 
             # Crear el registro 
             nueva_medicion = Mediciones(
@@ -69,21 +69,21 @@ def on_message(client, userdata, msg):
 
 
         #Estado de conexion    
-        # elif tipo_topico == "status":
-        #     estado_str = msg.payload.decode()   #online u offline
-        #     print(f"Estado de conexion: {estado_str}")
+        elif tipo_topico == "status":
+            estado_str = msg.payload.decode()   #online u offline
+            print(f"Estado de conexion: {estado_str}")
 
-        #     isActivo = True if estado_str == "online" else False
+            isActivo = True if estado_str == "online" else False
 
-        #     #buscar el dispositivo en la base de datos y actualizar su estado
-        #     dispositivo = db.query(Dispositivos).filter(Dispositivos.idDispositivo == device_uuid).first()
+            #buscar el dispositivo en la base de datos y actualizar su estado
+            dispositivo = db.query(Dispositivos).filter(Dispositivos.idDispositivo == device_uuid).first()
 
-        #     if dispositivo:
-        #         dispositivo.isActivo = isActivo
-        #         db.commit()
-        #         print("Estado del dispositivo actualizado")
-        #     else:
-        #         print("Dispositivo no encontrado")
+            if dispositivo:
+                dispositivo.isActivo = isActivo
+                db.commit()
+                print("Estado del dispositivo actualizado")
+            else:
+                print("Dispositivo no encontrado")
 
         #     # Avisar al frontend
         #     mensaje_ws = {
