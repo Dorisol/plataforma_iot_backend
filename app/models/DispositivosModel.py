@@ -22,3 +22,5 @@ class Dispositivos(Base):
     #en ese caso, "dispositivos" debe definirse en el modelo Tenant
     tenant = relationship("Tenant", back_populates="dispositivos")
     medicion = relationship("Mediciones", back_populates="dispositivo")
+    imagen = relationship("Imagenes", back_populates="dispositivo")
+

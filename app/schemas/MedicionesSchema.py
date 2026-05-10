@@ -21,7 +21,6 @@ class MedicionesCreate(MedicionesBase):
     idTenant: UUID
     idDispositivo: UUID
 
-
 class MedicionAgrupada(BaseModel):
     recorded_at: datetime
     variable: str

@@ -6,8 +6,12 @@ from app.db.session import SessionLocal
 from app.core.config import settings
 from app.models.MedicionesModel import Mediciones
 from app.models.DispositivosModel import Dispositivos
+from app.models.ImagenesModel import Imagenes
 import asyncio
 import app.websockets.websockets_manager as ws_manager
+import base64
+import os
+from datetime import datetime
 
 
 mqtt_client = mqtt.Client()
@@ -41,22 +45,64 @@ def on_message(client, userdata, msg):
 
         if tipo_topico == "data":
             payload = json.loads(msg.payload.decode())
-            print(f"Payload decodificado: {payload}")
+            #print(f"Payload decodificado: {payload}")
 
-            # Crear el registro 
-            nueva_medicion = Mediciones(
-                idMedicion = uuid.uuid4(),
-                idTenant=tenant_uuid,
-                idDispositivo=device_uuid,
-                variable=payload.get("variable"),
-                val=payload.get("val"),
-                unit=payload.get("unit"),
-                metadata_medicion={"device": str(device_uuid)}
-            )
+            variable_name = payload.get("variable")
             
-            db.add(nueva_medicion)
-            db.commit()
-            print("Medicion guardada")
+            #evaluar imagenes
+            if variable_name == "imagen_evidencia":
+                raw_b64 = payload.get("img")
+                if "," in raw_b64:
+                    raw_b64 = raw_b64.split(",")[1]
+                
+                #decodificar a bytes
+                imagen_bytes = base64.b64decode(raw_b64)
+
+                #escribir en la carpeta de data/storage de docker
+                ruta_base = "/app/data/storage/images"
+
+                ruta_dispositivo = os.path.join(ruta_base, str(device_uuid))
+                os.makedirs(ruta_dispositivo, exist_ok=True)
+
+                nombre_archivo = f"img_{datetime.now().strftime('%Y%m%d%H%M%S')}.jpg"
+                ruta_completa = os.path.join(ruta_dispositivo, nombre_archivo)
+                
+                #guardar imagen en el disco
+                with open(ruta_completa, "wb") as f:
+                    f.write(imagen_bytes)
+
+                print(f"Imagen guardada en {ruta_completa}")
+
+                url_imagen = f"/imagenes/{device_uuid}/{nombre_archivo}"
+                
+                #GUARDAR IMAGEN
+                nueva_imagen = Imagenes(
+                    idImagen = uuid.uuid4(),
+                    idTenant=tenant_uuid,
+                    idDispositivo=device_uuid,
+                    rutaImg=url_imagen
+                )
+
+                db.add(nueva_imagen)
+                db.commit()
+                print("Imagen guardada en bd")
+
+            
+            else:
+                #GUARDAR MEDICION
+                nueva_medicion = Mediciones(
+                    idMedicion = uuid.uuid4(),
+                    idTenant=tenant_uuid,
+                    idDispositivo=device_uuid,
+                    variable=payload.get("variable"),
+                    val=payload.get("val"),
+                    unit=payload.get("unit"),
+                    metadata_medicion={"device": str(device_uuid)}
+                )
+                
+                db.add(nueva_medicion)
+                db.commit()
+                print("Medicion guardada")
 
             # #Avisar al frontend 
             # mensaje_ws = {

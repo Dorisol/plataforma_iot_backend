@@ -46,6 +46,16 @@ def crearDispositivo(db: Session, nuevoDispositivo: DispositivosSchema.Dispositi
 
 
 def registrar_dispositivo_mqtt(tenant_id: str, dispositivo_id: str, username_mqtt: str, password_mqtt: str):
+
+    try:
+        with open(PASS_PATH, "a+") as f:
+            f.seek(0, 2) 
+            if f.tell() > 0:
+                f.seek(f.tell() - 1)
+                if f.read(1) != '\n':
+                    f.write('\n')
+    except Exception as e:
+        print(f"Error preparando archivo: {e}")
     
     # 1. Agregar el usuario y encriptar contraseña en password_file
     try:

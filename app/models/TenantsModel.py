@@ -16,3 +16,4 @@ class Tenant(Base):
     usuario = relationship("Usuarios", back_populates="tenant")
     dispositivos = relationship("Dispositivos", back_populates="tenant")
     medicion = relationship("Mediciones", back_populates="tenant_med")
+    imagen = relationship("Imagenes", back_populates="tenant")
